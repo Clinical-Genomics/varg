@@ -1,4 +1,4 @@
-# Variant Validation Report Generation (VARG)
+# Variant Validation Report Generator (VARG)
 
 *varg* is a simple tool that can be used to benchmark vcf-files against a truth-set of positive controls.
 
