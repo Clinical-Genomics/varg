@@ -9,8 +9,14 @@ and aggregate statistics generated from comparisons between each common variant.
 
 *varg* can be installed with pip
 
+from github:
 ```console
 pip install git+https://github.com/adrosenbaum/varg
+```
+
+from PyPI
+```console
+pip install varg
 ```
 
 # Usage
@@ -23,4 +29,4 @@ varg compare -t $TRUTH_VCF -v $BENCH_VCF
 
 The samples that are compared between the vcf will default to the respective order of the samples in the vcf-files. The user can specify what samples that should be compared with the ```-m/--samples-map``` option e.g. ```-m child=sample_1,father=sample_2,mother=sample_3``` will compare the sample 'child' in the truth-set vcf with sample 'sample_1' in the benchmark-vcf, etc.
 
-To control what fields are compared between the two vcf-files, the user must specify a .py file with the ```-f/--vcf-fields``` option. This will default to the file in varg/resources/compare_fields. In this file a constant COMPARE_FIELDS of python type dict must be declared. 
+To control what fields are compared between the two vcf-files, the user must specify a .py file with the ```-f/--vcf-fields``` option. This will default to the file in varg/resources/compare_fields. In this file a constant COMPARE_FIELDS of python type dict must be declared.
