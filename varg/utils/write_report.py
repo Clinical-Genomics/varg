@@ -1,5 +1,4 @@
 from sys import stdout
-import tabulate
 
 from .compare import Comparison
 
