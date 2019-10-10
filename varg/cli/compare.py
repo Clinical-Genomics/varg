@@ -60,5 +60,4 @@ def get_dynamic_module(module_path):
     spec = importlib.util.spec_from_file_location("compare_fields", module_path)
     compare_fields_module = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(compare_fields_module)
-
     return compare_fields_module.COMPARE_FIELDS
