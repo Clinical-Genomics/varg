@@ -1,10 +1,15 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
-## [Unreleased]
+## [unreleased]
 
 ### Changed
 
+### Added
+
+### Fixed
+
+## [1.2.0]
 
 ### Added
 - calculate search interval for SVs dynamically
