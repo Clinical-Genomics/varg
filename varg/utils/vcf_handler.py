@@ -65,7 +65,6 @@ class VCFHandler(cyvcf2.VCF):
                     variant_record.POS == record.POS,
                     variant_record.REF == record.REF,
                     variant_record.ALT == record.ALT,
-
                 )
             )
             if is_same:
@@ -81,12 +80,14 @@ class VCFHandler(cyvcf2.VCF):
         type_1 = variant_record.INFO.get('SVTYPE')
         if type_1 is None:
             return None
-        search_interval = 3000
+        type_1 = type_1.upper()
+        search_interval = self._find_search_interval(variant_record=variant_record)
         closest_match = None
         for hit in self(f"{variant_record.CHROM}:{pos-search_interval}-{pos+search_interval}"):
             type_2 = hit.INFO.get('SVTYPE')
             if type_2 is None or hit.INFO.get('END') is None:
                 continue
+            type_2 = type_2.upper()
             if hit.POS < pos - search_interval or hit.POS > pos + search_interval:
                 continue
             if type_1 in type_2 or type_2 in type_1:
@@ -99,3 +100,18 @@ class VCFHandler(cyvcf2.VCF):
                     if this_distance <= match_distance:
                         closest_match = hit
         return closest_match
+
+    @staticmethod
+    def _find_search_interval(variant_record):
+        """Given a variant, find an appropriate search interval, based on variant length"""
+        length_prop = 0.1
+        if variant_record.INFO.get('END'):
+            variant_length = variant_record.INFO['END'] - variant_record.POS
+        elif variant_record.INFO.get('SVLEN'):
+            variant_length = abs(variant_record.INFO['SVLEN'])
+        else:
+            variant_length = 0
+        interval = round(variant_length*length_prop)
+        if interval > 3000:
+            interval = 3000
+        return interval
