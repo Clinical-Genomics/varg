@@ -43,7 +43,10 @@ def compare(context, truth_set, variants, samples_map, vcf_fields):
     vcf_fields = get_dynamic_module(vcf_fields_path)
 
     report_writer = ReportWriter(intersection, vcf_fields)
-    report_writer.write()
+    for line in report_writer.write():
+        click.echo(line)
+    LOG.info('Aggregated statistics:')
+    click.echo(str(report_writer.aggr_stats))
 
 
 def parse_samples_map(samples_map_str):
