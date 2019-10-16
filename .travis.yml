@@ -8,6 +8,7 @@ script:
   - py.test -rxs --cov varg/ tests/
 
 install:
+  - pip install cython
   - pip install -r requirements.txt -r requirements-dev.txt -e .
 
 notifications:
