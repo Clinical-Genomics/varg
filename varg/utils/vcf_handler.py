@@ -76,7 +76,7 @@ class VCFHandler(cyvcf2.VCF):
         pos = variant_record.POS
         end = variant_record.INFO.get('END')
         if end is None:
-            return None
+            end = pos + 1
         type_1 = variant_record.INFO.get('SVTYPE')
         if type_1 is None:
             return None

@@ -116,6 +116,7 @@ setup(
     author=AUTHOR,
     author_email=EMAIL,
     python_requires=REQUIRES_PYTHON,
+    test_requirements=['pytest'],
     url=URL,
     packages=find_packages(exclude=('tests/','scripts/')),
     entry_points={

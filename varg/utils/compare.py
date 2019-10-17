@@ -60,9 +60,6 @@ class Comparison:
     def _evaluate_comparison(self, value_1, value_2):
 
         evaluation = dict()
-        if type(value_1) != type(value_2):
-            LOG.error("incompatible types %s and %s", type(value_1), type(value_2))
-            raise TypeError
 
         if isinstance(value_1, str):
             if value_1 == value_2:

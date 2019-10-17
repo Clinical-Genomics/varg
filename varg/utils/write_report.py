@@ -17,13 +17,8 @@ class ReportWriter:
         for records in self.compare_iter:
             comp = Comparison(records[0], records[1],  vcf_keys=self.vcf_fields, sample_idx_map=records[2])
             self._update_aggr_stats(comp)
-            self._write_line(comp)
+            yield comp
         self.aggr_stats.compile_stats()
-        self.aggr_stats.write_stats()
-
-    @staticmethod
-    def _write_line(comp):
-        print(comp)
 
     def _update_aggr_stats(self, comp):
 
@@ -65,9 +60,6 @@ class StatsHelper:
             if value.get('acc_diff') is not None:
                 acc_diff = self.stats[key].pop('acc_diff')
                 self.stats[key]['mean_diff'] = acc_diff / self.stats[key]['comparisons']
-
-    def write_stats(self):
-        print(str(self))
 
     def __str__(self):
         stats_str = ""

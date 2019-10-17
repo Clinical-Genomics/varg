@@ -1,5 +1,7 @@
 # Variant Validation Report Generator (VARG)
 [![PyPI version](https://badge.fury.io/py/varg.svg)](https://badge.fury.io/py/varg)
+[![Build Status](https://travis-ci.com/adrosenbaum/varg.svg?branch=master)](https://travis-ci.com/adrosenbaum/varg)
+[![Coverage Status](https://coveralls.io/repos/github/adrosenbaum/varg/badge.svg?branch=master)](https://coveralls.io/github/adrosenbaum/varg?branch=master)
 
 
 *varg* is a simple tool that can be used to benchmark vcf-files against a truth-set of positive controls.
