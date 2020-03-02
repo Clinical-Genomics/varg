@@ -48,6 +48,10 @@ def compare(context, truth_set, variants, samples_map, vcf_fields):
     LOG.info('Aggregated statistics:')
     click.echo(str(report_writer.aggr_stats))
 
+    LOG.info('Could not find following variants:')
+    for variant in truth_vcf.not_found_variants:
+        click.echo(variant)
+
 
 def parse_samples_map(samples_map_str):
 

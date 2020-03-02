@@ -13,6 +13,7 @@ class VCFHandler(cyvcf2.VCF):
         super(VCFHandler, self).__init__(vcf_path)
         self.file_path = vcf_path
         self.length = self._no_variants()
+        self.not_found_variants = []
 
     def _reset(self):
         """Reset itereator"""
@@ -44,6 +45,8 @@ class VCFHandler(cyvcf2.VCF):
             if record is not None:
                 yield (variant, record, samples_idx_map)
                 common_variants += 1
+            else:
+                self.not_found_variants.append(variant)
         LOG.info("Found %d variant in common", common_variants)
 
     @staticmethod
