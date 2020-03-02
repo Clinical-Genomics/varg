@@ -5,6 +5,9 @@ import cyvcf2
 
 LOG = logging.getLogger(__name__)
 
+CI_PADDING = 500
+MAX_PADDING = 3000
+
 class VCFHandler(cyvcf2.VCF):
     """ Class to handle cyvcf2.VCF objects """
 
@@ -115,6 +118,27 @@ class VCFHandler(cyvcf2.VCF):
         else:
             variant_length = 0
         interval = round(variant_length*length_prop)
-        if interval > 3000:
-            interval = 3000
+        ci_interval = _find_ci(variant_record)
+
+        if ci_interval is not None:
+            if interval < ci_interval:
+                interval = ci_interval + CI_PADDING
+                return interval
+
+        if interval > MAX_PADDING:
+            interval = MAX_PADDING
         return interval
+
+
+def _find_ci(variant_record):
+    """Given a variant record, returns the largest CIPOS or CIEND if present"""
+    intervals = []
+    if variant_record.INFO.get("CIPOS") is not None:
+        interval = abs(variant_record.INFO["CIPOS"][0])
+        intervals.append(interval)
+    if variant_record.INFO.get("CIEND") is not None:
+        interval = abs(variant_record.INFO["CIEND"][-1])
+        intervals.append(interval)
+    if not intervals:
+        return None
+    return max(intervals)
