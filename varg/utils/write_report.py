@@ -7,6 +7,13 @@ from .compare import Comparison
 class ReportWriter:
 
     def __init__(self, compare_iter, vcf_fields):
+        """
+            Creates report
+
+            Args:
+                compare_iter (iterator): Iterator over comparisons
+                vcf_fields (dictionary): Fields in VCF to be compared
+        """
 
         self.compare_iter =  compare_iter
         self.aggr_stats = StatsHelper()
