@@ -10,7 +10,7 @@ class Genotype:
 
 
 # Conversion functions
-get_score = lambda score: int(score.split(':')[-1])
+get_score = lambda score: int(str(score).split(':')[-1])
 get_alt_DP = lambda DP: [int(dp) if int(dp) >= 0 else None for dp in list(DP)]
 get_alt_AD = lambda DP: [[int(i) if int(i) >= 0 else None for i in dp][-1] for dp in list(DP)]
 get_GQ = lambda GQ: [int(gq[0]) if int(gq[0]) >= 0 else None for gq in GQ]
