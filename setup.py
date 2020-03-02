@@ -19,7 +19,7 @@ URL = 'https://github.com/Clinical-Genomics/varg'
 EMAIL = 'adam.rosenbaum@scilifelab.se'
 AUTHOR = 'Adam Rosenbaum'
 REQUIRES_PYTHON = '>=3.6.0'
-VERSION = '1.4.0'
+VERSION = '1.4.1'
 
 here = os.path.abspath(os.path.dirname(__file__))
 
