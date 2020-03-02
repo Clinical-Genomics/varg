@@ -1,18 +1,14 @@
 import logging
 
+from varg.utils.compare_mixin import CompareMixin
+
 LOG = logging.getLogger(__name__)
 
-STRING_SAME = 'same'
-STRING_DIFF = 'diff'
-NUM_SAME = 'same'
-NUM_LOWER = 'lower'
-NUM_HIGHER = 'higher'
-LIST_SAME = 'same'
-LIST_UNKNOWN = 'unknown'
-LIST_DIFF = 'diff'
 
-class Comparison:
+class Comparison(CompareMixin):
     """Class for a comparison"""
+
+
     def __init__(self, record_1, record_2, vcf_keys, sample_idx_map=None):
         """ Compare two vcf records based on the keys specified in vcf_keys"""
         self.record_1 = record_1
@@ -48,7 +44,7 @@ class Comparison:
                     conv_value_1 = self._rearrange_samples(conv_value_1, sample_idx_map[0])
                     conv_value_2 = self._rearrange_samples(conv_value_2, sample_idx_map[1])
 
-                comp_eval = self._evaluate_comparison(conv_value_1, conv_value_2)
+                comp_eval = self._evaluate_comparison(conv_value_1, conv_value_2, value_ids=value["ID"])
                 comparison[key] = (conv_value_1, conv_value_2, comp_eval)
             else:
                 log_msg = f"key {' or '.join(value['ID'])} not found in one of the records"
@@ -56,44 +52,6 @@ class Comparison:
 
         self.comparison = comparison
 
-
-    def _evaluate_comparison(self, value_1, value_2):
-
-        evaluation = dict()
-
-        if isinstance(value_1, str):
-            if value_1 == value_2:
-                evaluation['status'] = STRING_SAME
-            else:
-                evaluation['status'] = STRING_DIFF
-
-        # For float or int, add the abs diff between values
-        elif isinstance(value_1, (float, int)):
-            if value_1 == value_2:
-                evaluation['status'] = NUM_SAME
-            elif value_2 > value_1:
-                evaluation['status'] = NUM_HIGHER
-            else:
-                evaluation['status'] = NUM_LOWER
-            evaluation['diff'] = value_2 - value_1
-
-        elif isinstance(value_1, (tuple, list)):
-            if len(value_1) != len(value_2):
-                LOG.error("Unable to compare arrays of length %d and %d, must be same",
-                          len(value_1), len(value_2))
-                raise IndexError
-            similarity = LIST_SAME
-            for element_1, element_2 in zip(value_1, value_2):
-                if all((isinstance(element_1, str), isinstance(element_2, str))):
-                    if '.' in element_1 or '.' in element_2:
-                        similarity = LIST_UNKNOWN
-                    elif element_1 != element_2:
-                        similarity = LIST_DIFF
-                        break
-                elif element_1 != element_2:
-                    similarity = LIST_DIFF
-            evaluation['status'] = similarity
-        return evaluation
 
     @staticmethod
     def _rearrange_samples(value_list, idx_list):
