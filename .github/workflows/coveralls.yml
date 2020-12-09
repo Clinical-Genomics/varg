@@ -26,7 +26,7 @@ jobs:
 
     - name: Varg dependencies
       run: |
-        apt-get install libcurl-dev
+        sudo apt-get install libcurl-dev
         poetry install
 
     - name: Test with pytest & Coveralls
