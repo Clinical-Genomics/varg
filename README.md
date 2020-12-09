@@ -23,6 +23,11 @@ from PyPI
 pip install varg
 ```
 
+or using poetry:
+```
+poetry install
+```
+
 # Usage
 
 To compare two vcf-files, one vcf with positive controls TRUTH_VCF, with the vcf to be benchmarked BENCH_VCF run the command
