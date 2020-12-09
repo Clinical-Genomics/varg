@@ -1,4 +1,6 @@
-import pkg_resources
+try:
+    import importlib.metadata as importlib_metadata
+except ModuleNotFoundError:
+    import importlib_metadata
 
-__title__ = 'varg'
-__version__ = pkg_resources.get_distribution(__title__).version
+__version__ = importlib_metadata.version(__name__)

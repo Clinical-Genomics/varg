@@ -8,3 +8,7 @@ __pycache__/
 .coverage
 .DS_Store
 .cache/
+
+# IDE
+.idea/
+

@@ -1,0 +1,25 @@
+[tool.poetry]
+name = "varg"
+version = "1.6.0"
+description = "Benchmark vcf-files against a truth-set of positive controls"
+authors = ["henrikstranneheim <henrik.stranneheim@scilifelab.se>"]
+license = "MIT"
+
+[tool.poetry.dependencies]
+python = "^3.7"
+click = "7.1.2"
+Cython = "^0.29.21"
+cyvcf2 = "^0.10.0"
+coloredlogs = "^14.0"
+importlib-metadata = "^3.1.1"
+
+[tool.poetry.dev-dependencies]
+coveralls = "^2.2.0"
+pytest-cov = "^2.10.1"
+
+[tool.poetry.scripts]
+varg = "varg.__main__:main"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
