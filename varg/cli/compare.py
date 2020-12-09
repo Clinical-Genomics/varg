@@ -10,15 +10,33 @@ from varg.resources import path_to_compare_fields
 
 LOG = logging.getLogger(__name__)
 
-@click.command('compare')
-@click.option('-t', '--truth-set', type=click.Path(exists=True), required=True,
-              help="VCF with positive controls")
-@click.option('-v', '--variants', type=click.Path(exists=True),
-              help="VCF with variants that should be compared against truth-set")
-@click.option('-m', '--samples-map', type=str,
-              help="Specification of what samples that should be compared. E.g. 'sample1=proband,sample2=mother'")
-@click.option('-f', '--vcf-fields', type=click.Path(exists=True),
-              help="Path compare-specifications .py file")
+
+@click.command("compare")
+@click.option(
+    "-t",
+    "--truth-set",
+    type=click.Path(exists=True),
+    required=True,
+    help="VCF with positive controls",
+)
+@click.option(
+    "-v",
+    "--variants",
+    type=click.Path(exists=True),
+    help="VCF with variants that should be compared against truth-set",
+)
+@click.option(
+    "-m",
+    "--samples-map",
+    type=str,
+    help="Specification of what samples that should be compared. E.g. 'sample1=proband,sample2=mother'",
+)
+@click.option(
+    "-f",
+    "--vcf-fields",
+    type=click.Path(exists=True),
+    help="Path compare-specifications .py file",
+)
 @click.pass_context
 def compare(context, truth_set, variants, samples_map, vcf_fields):
 
@@ -32,9 +50,12 @@ def compare(context, truth_set, variants, samples_map, vcf_fields):
     if samples_map:
         samples_map = parse_samples_map(samples_map)
     else:
-        samples_map = ','.join(['='.join((sample_1, sample_2))
-                                for sample_1, sample_2
-                                in zip(truth_vcf.samples, bench_vcf.samples)])
+        samples_map = ",".join(
+            [
+                "=".join((sample_1, sample_2))
+                for sample_1, sample_2 in zip(truth_vcf.samples, bench_vcf.samples)
+            ]
+        )
         samples_map = parse_samples_map(samples_map)
 
     intersection = truth_vcf.intersection(vcf=bench_vcf, samples_map=samples_map)
@@ -45,19 +66,23 @@ def compare(context, truth_set, variants, samples_map, vcf_fields):
     report_writer = ReportWriter(intersection, vcf_fields)
     for line in report_writer.write():
         click.echo(line)
-    LOG.info('Aggregated statistics:')
+    LOG.info("Aggregated statistics:")
     click.echo(str(report_writer.aggr_stats))
 
-    LOG.info('Could not find following variants:')
+    LOG.info("Could not find following variants:")
     for variant in truth_vcf.not_found_variants:
         click.echo(variant)
 
 
 def parse_samples_map(samples_map_str):
 
-    samples_map = [(sample_pair.split('=')[0], sample_pair.split('=')[1])
-                   for sample_pair in samples_map_str.split(',')]
-    samples_str = '\t'.join(['/'.join((samples[0], samples[1])) for samples in samples_map])
+    samples_map = [
+        (sample_pair.split("=")[0], sample_pair.split("=")[1])
+        for sample_pair in samples_map_str.split(",")
+    ]
+    samples_str = "\t".join(
+        ["/".join((samples[0], samples[1])) for samples in samples_map]
+    )
     LOG.info(f"Comparing samples: {samples_str}")
     return samples_map
 

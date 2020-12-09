@@ -1,5 +1,3 @@
-
-
 import logging
 import cyvcf2
 
@@ -7,6 +5,7 @@ LOG = logging.getLogger(__name__)
 
 CI_PADDING = 500
 MAX_PADDING = 3000
+
 
 class VCFHandler(cyvcf2.VCF):
     """ Class to handle cyvcf2.VCF objects """
@@ -33,7 +32,9 @@ class VCFHandler(cyvcf2.VCF):
 
     def intersection(self, vcf, samples_map=None):
         """ Finds intersection, i.e. common variants with another VCFHandler object"""
-        LOG.info("Find common variants between %s and %s", self.file_path, vcf.file_path)
+        LOG.info(
+            "Find common variants between %s and %s", self.file_path, vcf.file_path
+        )
         common_variants = 0
         samples_1 = self.samples
         samples_2 = vcf.samples
@@ -41,7 +42,7 @@ class VCFHandler(cyvcf2.VCF):
         if samples_map:
             samples_idx_map = self._samples_map(samples_1, samples_2, samples_map)
         for variant in self:
-            if variant.INFO.get('SVTYPE', None) is None:
+            if variant.INFO.get("SVTYPE", None) is None:
                 record = vcf.find_snv(variant)
             else:
                 record = vcf.find_similar_sv(variant)
@@ -63,11 +64,14 @@ class VCFHandler(cyvcf2.VCF):
 
     def find_snv(self, variant_record):
         """Given a cyvcf2 variant record, find a matching variant in vcf"""
-        region_str = f"{variant_record.CHROM}:{variant_record.POS}-{variant_record.POS + 1}"
+        region_str = (
+            f"{variant_record.CHROM}:{variant_record.POS}-{variant_record.POS + 1}"
+        )
         for record in self(region_str):
             is_same = all(
                 (
-                    variant_record.CHROM.lower().strip('chr') == record.CHROM.lower().strip('chr'),
+                    variant_record.CHROM.lower().strip("chr")
+                    == record.CHROM.lower().strip("chr"),
                     variant_record.POS == record.POS,
                     variant_record.REF == record.REF,
                     variant_record.ALT == record.ALT,
@@ -80,18 +84,20 @@ class VCFHandler(cyvcf2.VCF):
     def find_similar_sv(self, variant_record):
         """Given a cyvcf2 variant record of a SV, find a matching variant in vcf"""
         pos = variant_record.POS
-        end = variant_record.INFO.get('END')
+        end = variant_record.INFO.get("END")
         if end is None:
             end = pos + 1
-        type_1 = variant_record.INFO.get('SVTYPE')
+        type_1 = variant_record.INFO.get("SVTYPE")
         if type_1 is None:
             return None
         type_1 = type_1.upper()
         search_interval = self._find_search_interval(variant_record=variant_record)
         closest_match = None
-        for hit in self(f"{variant_record.CHROM}:{pos-search_interval}-{pos+search_interval}"):
-            type_2 = hit.INFO.get('SVTYPE')
-            if type_2 is None or hit.INFO.get('END') is None:
+        for hit in self(
+            f"{variant_record.CHROM}:{pos-search_interval}-{pos+search_interval}"
+        ):
+            type_2 = hit.INFO.get("SVTYPE")
+            if type_2 is None or hit.INFO.get("END") is None:
                 continue
             type_2 = type_2.upper()
             if hit.POS < pos - search_interval or hit.POS > pos + search_interval:
@@ -101,8 +107,10 @@ class VCFHandler(cyvcf2.VCF):
                     closest_match = hit
                     continue
                 else:
-                    this_distance = abs(hit.POS-pos) + abs(hit.INFO['END']-end)
-                    match_distance = abs(closest_match.POS-pos) + abs(closest_match.INFO['END']-end)
+                    this_distance = abs(hit.POS - pos) + abs(hit.INFO["END"] - end)
+                    match_distance = abs(closest_match.POS - pos) + abs(
+                        closest_match.INFO["END"] - end
+                    )
                     if this_distance <= match_distance:
                         closest_match = hit
         return closest_match
@@ -111,13 +119,13 @@ class VCFHandler(cyvcf2.VCF):
     def _find_search_interval(variant_record):
         """Given a variant, find an appropriate search interval, based on variant length"""
         length_prop = 0.1
-        if variant_record.INFO.get('END'):
-            variant_length = variant_record.INFO['END'] - variant_record.POS
-        elif variant_record.INFO.get('SVLEN'):
-            variant_length = abs(variant_record.INFO['SVLEN'])
+        if variant_record.INFO.get("END"):
+            variant_length = variant_record.INFO["END"] - variant_record.POS
+        elif variant_record.INFO.get("SVLEN"):
+            variant_length = abs(variant_record.INFO["SVLEN"])
         else:
             variant_length = 0
-        interval = round(variant_length*length_prop)
+        interval = round(variant_length * length_prop)
         ci_interval = _find_ci(variant_record)
 
         if ci_interval is not None:

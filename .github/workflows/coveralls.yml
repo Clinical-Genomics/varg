@@ -26,6 +26,7 @@ jobs:
 
     - name: Varg dependencies
       run: |
+        # Prerequisite for cyvcf2 = "^0.10.0"
         sudo apt-get install libcurl4-openssl-dev
         poetry install
 
@@ -33,7 +34,6 @@ jobs:
       run: |
         poetry run pytest --cov=varg/
         poetry run coveralls
-        bash tests/test.bash
       env:
         GITHUB: 1
         COVERALLS_REPO_TOKEN: ${{ secrets.COVERALLS_REPO_TOKEN }}
