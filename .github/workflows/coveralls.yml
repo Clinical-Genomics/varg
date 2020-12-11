@@ -27,7 +27,8 @@ jobs:
     - name: Varg dependencies
       run: |
         # Prerequisite for cyvcf2 = "^0.10.0"
-        sudo apt-get install libcurl4-openssl-dev
+        sudo apt-get update --fix-missing && \
+        apt-get install libcurl4-openssl-dev
         poetry install
 
     - name: Test with pytest & Coveralls
