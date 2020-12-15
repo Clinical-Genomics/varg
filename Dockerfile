@@ -24,7 +24,7 @@ RUN micropipenv requirements --method poetry > requirements.txt
 
 RUN pip install -r requirements.txt
 
-RUN pip install varg==1.6.1
+RUN pip install varg
 
 CMD ["varg", "--help"]
 
