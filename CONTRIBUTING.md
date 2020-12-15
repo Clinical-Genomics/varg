@@ -15,10 +15,12 @@ pre-commit install
 
 ## Publishing to PyPi
 
-Bump the version according to semantic versioning locally on branch `master` using poetry:
+Bump the version according to semantic versioning locally on branch `master` using [bumpversion]:
 
 ```
-poetry version [major | minor | patch ]
+bumpversion [major | minor | patch ]
+git push
+git push --tag
 ```
 
 Reinstall the application with the new version:
@@ -35,5 +37,6 @@ poetry publish
 ```
 
 [black-url]: https://github.com/psf/black
+[bumpversion]: https://github.com/c4urself/bump2version
 [development-branch-model]: http://www.clinicalgenomics.se/development/dev/models/
 [semantic versioning]: https://semver.org/
