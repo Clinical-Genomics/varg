@@ -13,14 +13,12 @@ Files will be blacked automatically with each push to github. If you would like 
 pre-commit install
 ```
 
-## Publishing to PyPi
+## Publishing
 
 Bump the version according to semantic versioning locally on branch `master` using [bumpversion]:
 
 ```
 bumpversion [major | minor | patch ]
-git push
-git push --tag
 ```
 
 Reinstall the application with the new version:
@@ -29,12 +27,20 @@ Reinstall the application with the new version:
 poetry install
 ```
 
-Build and publish:
+Build and publish to PyPi:
 
 ```
 poetry build
 poetry publish
 ```
+
+Push to git:
+```
+git push
+git push --tag
+```
+
+This will trigger a new docker build using the git release tag as name.
 
 [black-url]: https://github.com/psf/black
 [bumpversion]: https://github.com/c4urself/bump2version
