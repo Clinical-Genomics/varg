@@ -8,6 +8,10 @@ name: Publish to Docker Hub
   push:
     tags:
       - '*'
+
+env:
+  STATE_RELEASE_VERSION: echo ::save-state name=RELEASE_VERSION::$(echo ${GITHUB_REF:10})
+  
 jobs:
   docker-image-CI:
    name: Docker Image CI
@@ -16,7 +20,6 @@ jobs:
     - name: Check out git repository
       uses: actions/checkout@v2
     - name: Publish to Registry
-      pre: echo ::save-state name=RELEASE_VERSION::$(echo ${GITHUB_REF:10})
       uses: elgohr/Publish-Docker-Github-Action@master
       with:
         name: clinicalgenomics/varg
