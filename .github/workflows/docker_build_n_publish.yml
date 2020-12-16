@@ -10,8 +10,8 @@ name: Publish to Docker Hub
       - '*'
 
 env:
-  STATE_RELEASE_VERSION: echo ::save-state name=RELEASE_VERSION::$(echo ${GITHUB_REF:10})
-  
+  STATE_RELEASE_VERSION: ${{ github.event.release.tag_name }}
+
 jobs:
   docker-image-CI:
    name: Docker Image CI
